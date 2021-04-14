@@ -1,4 +1,4 @@
 steps:
-  run:
-    name: Version package manifest
-    command: <<include(scripts/version.ps1)>>
+  - run:
+      name: Version package manifest
+      command: <<include(scripts/version.ps1)>>

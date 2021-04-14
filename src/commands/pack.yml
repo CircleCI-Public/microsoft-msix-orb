@@ -1,1 +1,57 @@
-pack.yml
+parameters:
+  sdk-version:
+    type: string
+    default: "10.0.17763.0"
+    description: Windows SDK version to use when invoking Makeappx.exe.
+  working-dir:
+    type: string
+    default: "~/project"
+    description: Working directory
+  package-name:
+    type: string
+    default: "package.appx"
+    description: Output package name
+  using-sln:
+    type: boolean
+    default: true
+    description: | 
+      Build an MSIX package from a solution file. Set this to false if you have 
+      a prebuilt or existing executable file. This determine whether your 
+      package is built using msbuild or makeappx.
+  signing-cert:
+    type: env_var_name
+    default: MSIX_SIGNING_CERTIFICATE
+    description: |
+      Environment variable name for the base64-encoded signing certificate.
+  certificate-password:
+    type: env_var_name
+    default: MSIX_CERTIFICATE_PASSWORD
+    description: |
+      Environment variable containing the password used to decrypt the 
+      certificate file.
+
+steps:
+  - when:
+      condition: <<parameters.using-sln>>
+      steps:
+        - run:
+            name: Build MSIX solution
+            command: <<include(scripts/pack-sln.ps1)>>
+            environment:
+              PACK_WINDOWS_SDK: <<parameters.sdk-version>>
+              PACK_PACKAGE_NAME: <<parameters.package-name>>
+              PACK_SIGNING_CERT: $Env:<<parameters.signing-cert>>
+              PACK_CERT_PASSWORD: $Env:<<parameters.certificate-password>>
+            working_directory: <<parameters.working-dir>>
+  - unless:
+      condition: <<parameters.using-sln>>
+      steps:
+        - run:
+            name: Build MSIX installer with executable
+            command: <<include(scripts/pack-exe.ps1)>>
+            environment:
+              PACK_WINDOWS_SDK: <<parameters.sdk-version>>
+              PACK_PACKAGE_NAME: <<parameters.package-name>>
+              PACK_SIGNING_CERT: $Env.<<parameters.signing-cert>>
+              PACK_CERT_PASSWORD: $Env.<<parameters.certificate-password>>
+            working_directory: <<parameters.working-dir>>
