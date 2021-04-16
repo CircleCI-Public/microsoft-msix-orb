@@ -43,6 +43,9 @@ steps:
               PACK_SIGNING_CERT: $Env:<<parameters.signing-cert>>
               PACK_CERT_PASSWORD: $Env:<<parameters.certificate-password>>
             working_directory: <<parameters.working-dir>>
+        - store_artifacts:
+            path: <<parameters.working-dir>>/AppPackages.zip
+
   - unless:
       condition: <<parameters.using-sln>>
       steps:
@@ -55,3 +58,5 @@ steps:
               PACK_SIGNING_CERT: $Env.<<parameters.signing-cert>>
               PACK_CERT_PASSWORD: $Env.<<parameters.certificate-password>>
             working_directory: <<parameters.working-dir>>
+        - store_artifacts:
+          path: <<parameters.working-dir>>/AppPackages.zip
