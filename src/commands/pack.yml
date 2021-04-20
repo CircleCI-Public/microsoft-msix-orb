@@ -11,6 +11,11 @@ parameters:
     type: string
     default: "package.appx"
     description: Output package name
+  parameters:
+    type: string
+    description: | 
+      Parameters to pass to either Makeappx.exe or MSBuild.exe, depending on the
+      value of using-sln.
   using-sln:
     type: boolean
     default: true
@@ -48,12 +53,17 @@ steps:
             environment:
               PACK_WINDOWS_SDK: <<parameters.sdk-version>>
               PACK_PACKAGE_NAME: <<parameters.package-name>>
+              PACK_PARAMETERS: <<parameters.parameters>>
               PACK_IMPORT_CERT: <<parameters.import-cert>>
               PACK_SIGNING_CERT: $Env:<<parameters.signing-cert>>
               PACK_CERT_PASSWORD: $Env:<<parameters.certificate-password>>
             working_directory: <<parameters.working-dir>>
         - store_artifacts:
             path: <<parameters.working-dir>>/AppPackages.zip
+        - persist_to_workspace:
+            root: .
+            paths:
+              - AppPackages
 
   - unless:
       condition: <<parameters.using-sln>>
@@ -62,11 +72,15 @@ steps:
             name: Build MSIX installer with executable
             command: <<include(scripts/pack-exe.ps1)>>
             environment:
-              PACK_WINDOWS_SDK: <<parameters.sdk-version>>
               PACK_PACKAGE_NAME: <<parameters.package-name>>
+              PACK_PARAMETERS: <<parameters.parameters>>
               PACK_IMPORT_CERT: <<parameters.import-cert>>
               PACK_SIGNING_CERT: $Env.<<parameters.signing-cert>>
               PACK_CERT_PASSWORD: $Env.<<parameters.certificate-password>>
             working_directory: <<parameters.working-dir>>
         - store_artifacts:
-          path: <<parameters.working-dir>>/AppPackages.zip
+            path: <<parameters.working-dir>>/AppPackages.zip
+        - persist_to_workspace:
+            root: .
+            paths:
+              - AppPackages

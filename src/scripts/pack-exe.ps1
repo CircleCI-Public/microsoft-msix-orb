@@ -1,7 +1,8 @@
+$default_parameters = "/d $Env:PACK_INPUT_DIR /p $Env:PACK_PACKAGE_NAME"
 $parameters = ""
 
-if ( $Env:PACK_MAPPING_FILE -ne "") {
-    "/f ${Env.PACK_MAPPING_FILE}"
+if ($Env:PACK_PARAMETERS -eq "") {
+  $parameters = $default_parameters
 }
 
 if ($Env:PACK_IMPORT_CERT -eq "true") {
@@ -18,7 +19,7 @@ if ($Env:PACK_IMPORT_CERT -eq "true") {
 
 $makeappx = "C:\Program Files (x86)\Windows Kits\10\bin\${Env.PACK_WINDOWS_SDK}\x64\makeappx.exe"
 
-& $makeappx pack /d $Env:PACK_INPUT_DIR /p $Env:PACK_PACKAGE_NAME $parameters
+& $makeappx pack $parameters
 
 $compress = @{
   Path = "AppPackages"
