@@ -1,29 +1,10 @@
-$default_parameters = "/d $Env:PACK_INPUT_DIR /p $Env:PACK_PACKAGE_NAME"
-$parameters = ""
-
-if ($Env:PACK_PARAMETERS -eq "") {
-  $parameters = $default_parameters
+$default_parameters = @("/m $Env:PACK_MANIFEST_FILE", "/f $Env:PACK_MAP_FILE", "/p $Env:PACK_PACKAGE_NAME")
+$parameters = if ($Env:PACK_PARAMETERS -eq $null) {
+  $default_parameters
+} else {
+  $Env:PACK_PARAMETERS
 }
 
-if ($Env:PACK_IMPORT_CERT -eq "true") {
-  $certificate = $ExecutionContext.InvokeCommand.ExpandString($Env:PACK_SIGNING_CERT)
-  $cert_pass = $ExecutionContext.InvokeCommand.ExpandString($Env:PACK_CERT_PASSWORD)
+$makeappx = "'C:\Program Files (x86)\Windows Kits\10\bin\${Env:PACK_WINDOWS_SDK}\x64\makeappx.exe'"
 
-  [System.Convert]::FromBase64String($certificate) | Set-Content cert.pfx -Encoding Byte 
-  # From https://gist.github.com/jrahme-cci/30a135c50db93a27bba649ddfb054661
-  $Cert = Import-PfxCertificate -FilePath ./cert.pfx -Password (ConvertTo-SecureString -String "$cert_pass" -AsPlainText -Force) -CertStoreLocation Cert:\LocalMachine\My
-  Export-Certificate -Cert $Cert -File c:\Cert.sst -Type SST
-  Import-Certificate -File c:\cert.sst  -CertStoreLocation Cert:\LocalMachine\Root 
-  Import-Certificate -File c:\cert.sst -CertStoreLocation Cert:\CurrentUser\My
-}
-
-$makeappx = "C:\Program Files (x86)\Windows Kits\10\bin\${Env.PACK_WINDOWS_SDK}\x64\makeappx.exe"
-
-& $makeappx pack $parameters
-
-$compress = @{
-  Path = "AppPackages"
-  CompressionLevel = "Fastest"
-  DestinationPath = "AppPackages.zip"
-}
-Compress-Archive @compress
+"& $makeappx pack $parameters" | iex

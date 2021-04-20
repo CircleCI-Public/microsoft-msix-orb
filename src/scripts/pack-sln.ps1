@@ -1,13 +1,15 @@
-$default_parameters = " /p:Platform=x64"
-$parameters = Env:PACK_PARAMETERS
-
-if ($Env:PACK_PARAMETERS -eq "") {
-  $parameters = $default_parameters
+$default_parameters = "/p:Platform=x64"
+$parameters = if ($Env:PACK_PARAMETERS -eq $null) {
+  $default_parameters
+} else {
+  $Env:PACK_PARAMETERS
 }
 
-$msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
+echo $parameters
 
-if ($Env:PACK_IMPORT_CERT -eq "true") {
+$msbuild = "'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe'"
+
+if ($Env:PACK_IMPORT_CERT -eq 1) {
   $certificate = $ExecutionContext.InvokeCommand.ExpandString($Env:PACK_SIGNING_CERT)
   $cert_pass = $ExecutionContext.InvokeCommand.ExpandString($Env:PACK_CERT_PASSWORD)
 
@@ -18,7 +20,7 @@ if ($Env:PACK_IMPORT_CERT -eq "true") {
   Import-Certificate -File c:\cert.sst  -CertStoreLocation Cert:\LocalMachine\Root 
   Import-Certificate -File c:\cert.sst -CertStoreLocation Cert:\CurrentUser\My
 }
-& $msbuild $parameters
+"& $msbuild $parameters" | iex
 
 $compress = @{
   Path = "AppPackages"

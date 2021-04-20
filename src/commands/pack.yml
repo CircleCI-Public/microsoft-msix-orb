@@ -13,6 +13,7 @@ parameters:
     description: Output package name
   parameters:
     type: string
+    default: ""
     description: | 
       Parameters to pass to either Makeappx.exe or MSBuild.exe, depending on the
       value of using-sln.
@@ -23,6 +24,14 @@ parameters:
       Build an MSIX package from a solution file. Set this to false if you have 
       a prebuilt or existing executable file. This determine whether your 
       package is built using msbuild or makeappx.
+  mapping-file:
+    type: string
+    default: ""
+    description: Mapping file to use when building MSIX without source code.
+  manifest-file:
+    type: string
+    default: ""
+    description: Manifest file to use when building MSIX without source code.
   import-cert:
     type: boolean
     default: true
@@ -61,7 +70,7 @@ steps:
         - store_artifacts:
             path: <<parameters.working-dir>>/AppPackages.zip
         - persist_to_workspace:
-            root: .
+            root: <<parameters.working-dir>>
             paths:
               - AppPackages
 
@@ -73,14 +82,17 @@ steps:
             command: <<include(scripts/pack-exe.ps1)>>
             environment:
               PACK_PACKAGE_NAME: <<parameters.package-name>>
+              PACK_WINDOWS_SDK: <<parameters.sdk-version>>
               PACK_PARAMETERS: <<parameters.parameters>>
               PACK_IMPORT_CERT: <<parameters.import-cert>>
-              PACK_SIGNING_CERT: $Env.<<parameters.signing-cert>>
-              PACK_CERT_PASSWORD: $Env.<<parameters.certificate-password>>
+              PACK_SIGNING_CERT: $Env:<<parameters.signing-cert>>
+              PACK_CERT_PASSWORD: $Env:<<parameters.certificate-password>>
+              PACK_MAP_FILE: <<parameters.mapping-file>>
+              PACK_MANIFEST_FILE: <<parameters.manifest-file>>
             working_directory: <<parameters.working-dir>>
         - store_artifacts:
-            path: <<parameters.working-dir>>/AppPackages.zip
+            path: <<parameters.working-dir>>/<<parameters.package-name>>.appx
         - persist_to_workspace:
-            root: .
+            root: <<parameters.working-dir>>
             paths:
-              - AppPackages
+              - "*.appx"
