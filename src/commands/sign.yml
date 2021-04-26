@@ -34,6 +34,10 @@ parameters:
     description: |
       Environment variable containing the password used to decrypt the 
       certificate file.
+  certificate-fingerprint:
+    type: string
+    description: Fingerprint of the certificate to sign the application with.
+    default: ""
 
 steps:
   - run:
@@ -46,6 +50,7 @@ steps:
         SIGN_IMPORT_CERT: <<parameters.import-cert>>
         SIGN_SIGNING_CERT: $Env:<<parameters.signing-cert>>
         SIGN_CERT_PASSWORD: $Env:<<parameters.certificate-password>>
+        SIGN_FINGERPRINT: <<parameters.certificate-fingerprint>>
       working_directory: <<parameters.working-dir>>
   - store_artifacts:
       path: <<parameters.working-dir>>/<<parameters.package-name>>.appx

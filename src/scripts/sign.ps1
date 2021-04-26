@@ -1,10 +1,17 @@
-$default_parameters = @("$Env:SIGN_PACKAGE_NAME.appx", "/a")
+$default_parameters = @("$Env:SIGN_PACKAGE_NAME.appx")
 $parameters = if ($Env:SIGN_PARAMETERS -eq $null) {
   $default_parameters
 } else {
   $Env:SIGN_PARAMETERS
 }
 
+if ($Env:SIGN_FINGERPRINT -ne $null) {
+  $parameters = ,"/sha1 $Env:SIGN_FINGERPRINT " + $parameters
+} else {
+    $parameters = ,"/a " + $parameters
+}
+
+echo $parameters
 
 if ($Env:SIGN_IMPORT_CERT -eq 1) {
   $certificate = $ExecutionContext.InvokeCommand.ExpandString($Env:SIGN_SIGNING_CERT)
