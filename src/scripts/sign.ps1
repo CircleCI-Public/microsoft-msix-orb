@@ -17,7 +17,7 @@ if ($Env:SIGN_IMPORT_CERT -eq 1) {
   $certificate = $ExecutionContext.InvokeCommand.ExpandString($Env:SIGN_SIGNING_CERT)
   $cert_pass = $ExecutionContext.InvokeCommand.ExpandString($Env:SIGN_CERT_PASSWORD)
 
-  [System.Convert]::FromBase64String($certificate) | Set-Content cert.pfx -Encoding Byte 
+  [System.Convert]::FromBase64String($certificate) | Set-Content cert.pfx -AsByteStream
   # From https://gist.github.com/jrahme-cci/30a135c50db93a27bba649ddfb054661
   $Cert = Import-PfxCertificate -FilePath ./cert.pfx -Password (ConvertTo-SecureString -String "$cert_pass" -AsPlainText -Force) -CertStoreLocation Cert:\LocalMachine\My
   Export-Certificate -Cert $Cert -File c:\Cert.sst -Type SST
