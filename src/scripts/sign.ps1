@@ -25,6 +25,6 @@ if ($Env:SIGN_IMPORT_CERT -eq 1) {
   Import-Certificate -File tmp:\cert.sst -CertStoreLocation Cert:\CurrentUser\My
 }
 
-$signtool = "'C:\Program Files (x86)\Windows Kits\10\bin\${Env:SIGN_WINDOWS_SDK}\x64\signtool.exe'"
+$signtool = "${Env:ProgramFiles(x86)}\Windows Kits\10\bin\${Env:SIGN_WINDOWS_SDK}\x64\signtool.exe"
 
 "& $signtool sign $parameters" | iex
