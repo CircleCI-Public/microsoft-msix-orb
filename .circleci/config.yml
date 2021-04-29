@@ -22,7 +22,7 @@ jobs:
   integration-test_using-sln:
     executor:
       name: win/default
-      shell: pwsh.exe
+      shell: powershell.exe
     steps:
       - checkout
       - msix/pack:

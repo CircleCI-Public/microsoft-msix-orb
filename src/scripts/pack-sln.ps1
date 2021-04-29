@@ -13,10 +13,10 @@ if ($Env:PACK_IMPORT_CERT -eq 1) {
   $certificate = $ExecutionContext.InvokeCommand.ExpandString($Env:PACK_SIGNING_CERT)
   $cert_pass = $ExecutionContext.InvokeCommand.ExpandString($Env:PACK_CERT_PASSWORD)
 
-  [System.Convert]::FromBase64String($certificate) | Set-Content C:\cert.pfx -AsByteStream
+  [System.Convert]::FromBase64String($certificate) | Set-Content C:\cert.pfx -Encoding Byte
   Import-PfxCertificate -FilePath C:\cert.pfx -Password (ConvertTo-SecureString -String "$cert_pass" -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
 }
-Invoke-Expression "$msbuild $parameters"
+"& $msbuild $parameters" | iex
 
 $compress = @{
   Path = "AppPackages"
