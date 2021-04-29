@@ -44,6 +44,7 @@ jobs:
           working-dir: sample/SampleExe
           package-name: circleci-cli
           signing-cert: MSIX_SIGNING_CERT
+          certificate-fingerprint: "91E805BC501F4951E2B48E222DA6C3D882BFA683"
 
 workflows:
   test-pack:
