@@ -14,15 +14,15 @@ parameters:
   parameters:
     type: string
     default: ""
-    description: | 
+    description: |
       Parameters to pass to either Makeappx.exe or MSBuild.exe, depending on the
       value of using-sln.
   using-sln:
     type: boolean
     default: true
-    description: | 
-      Build an MSIX package from a solution file. Set this to false if you have 
-      a prebuilt or existing executable file. This determine whether your 
+    description: |
+      Build an MSIX package from a solution file. Set this to false if you have
+      a prebuilt or existing executable file. This determine whether your
       package is built using msbuild or makeappx.
   mapping-file:
     type: string
@@ -36,9 +36,9 @@ parameters:
     type: boolean
     default: true
     description: |
-      Automatically import a certificate into the machine's store based on the 
+      Automatically import a certificate into the machine's store based on the
       valaues of signing-cert and certificate-password. Set this to false if you
-      will be importing your certificate in some other way (e.g Hashicorp 
+      will be importing your certificate in some other way (e.g Hashicorp
       Vault).
   signing-cert:
     type: env_var_name
@@ -49,7 +49,7 @@ parameters:
     type: env_var_name
     default: MSIX_CERTIFICATE_PASSWORD
     description: |
-      Environment variable containing the password used to decrypt the 
+      Environment variable containing the password used to decrypt the
       certificate file.
 
 steps:

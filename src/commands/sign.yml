@@ -13,15 +13,15 @@ parameters:
   parameters:
     type: string
     default: ""
-    description: | 
+    description: |
       Parameters to pass to SignTool.exe.
   import-cert:
     type: boolean
     default: true
     description: |
-      Automatically import a certificate into the machine's store based on the 
+      Automatically import a certificate into the machine's store based on the
       valaues of signing-cert and certificate-password. Set this to false if you
-      will be importing your certificate in some other way (e.g Hashicorp 
+      will be importing your certificate in some other way (e.g Hashicorp
       Vault).
   signing-cert:
     type: env_var_name
@@ -32,7 +32,7 @@ parameters:
     type: env_var_name
     default: MSIX_CERTIFICATE_PASSWORD
     description: |
-      Environment variable containing the password used to decrypt the 
+      Environment variable containing the password used to decrypt the
       certificate file.
   certificate-fingerprint:
     type: string
