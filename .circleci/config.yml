@@ -1,8 +1,9 @@
 version: 2.1
 
 orbs:
-  microsoft-msix: circleci/microsoft-msix@<<pipeline.parameters.dev-orb-version>>
+  msix: circleci/microsoft-msix@<<pipeline.parameters.dev-orb-version>>
   orb-tools: circleci/orb-tools@10.0
+  win: circleci/windows@2.4.0
 
 parameters:
   run-integration-tests:
@@ -19,10 +20,13 @@ parameters:
 
 jobs:
   integration-test_using-sln:
-    docker:
-      - image: cimg/base:stable
+    executor:
+      name: win/default
+      shell: pwsh.exe
     steps:
-      - checkout
+      - run:
+          name: Clone demo repository
+          command: git clone https://github.com/CircleCI-Public/msix-orb-demo.git sample
       - msix/pack:
           working-dir: sample/Sample
           import-cert: true
@@ -33,17 +37,12 @@ workflows:
     jobs:
       - orb-tools/lint # Lint Yaml files
       - orb-tools/pack # Pack orb source
-      - shellcheck/check:
-          dir: ./src/scripts
-          exclude: SC2148
       - orb-tools/publish-dev:
           orb-name: circleci/microsoft-msix
           context: orb-publishing
           requires:
             - orb-tools/lint
             - orb-tools/pack
-            - bats/run
-            - shellcheck/check
       - orb-tools/trigger-integration-tests-workflow:
           name: trigger-integration-dev
           context: orb-publishing
@@ -53,7 +52,7 @@ workflows:
   integration-test_deploy:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - integration-test-1
+      - integration-test_using-sln
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/microsoft-msix
           context: orb-publishing
@@ -61,7 +60,7 @@ workflows:
           fail-if-semver-not-indicated: true
           publish-version-tag: false
           requires:
-            - integration-test-1
+            - integration-test_using-sln
           filters:
             branches:
               only:
