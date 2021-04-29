@@ -7,6 +7,6 @@ $parameters = if ($Env:PACK_PARAMETERS -eq $null) {
   $Env:PACK_PARAMETERS
 }
 
-$makeappx = "${Env:ProgramFiles(x86)}\Windows Kits\10\bin\${Env:PACK_WINDOWS_SDK}\x64\makeappx.exe"
+$makeappx = "'${Env:ProgramFiles(x86)}\Windows Kits\10\bin\${Env:PACK_WINDOWS_SDK}\x64\makeappx.exe'"
 
-& $makeappx pack $parameters
+"& $makeappx pack $parameters" | iex

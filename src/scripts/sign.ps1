@@ -21,6 +21,6 @@ if ($Env:SIGN_IMPORT_CERT -eq 1) {
   Import-PfxCertificate -FilePath C:\cert.pfx -Password (ConvertTo-SecureString -String "$cert_pass" -AsPlainText -Force) -CertStoreLocation Cert:\LocalMachine\My
 }
 
-$signtool = "${Env:ProgramFiles(x86)}\Windows Kits\10\bin\${Env:SIGN_WINDOWS_SDK}\x64\signtool.exe"
+$signtool = "'${Env:ProgramFiles(x86)}\Windows Kits\10\bin\${Env:SIGN_WINDOWS_SDK}\x64\signtool.exe'"
 
 "& $signtool sign $parameters" | iex

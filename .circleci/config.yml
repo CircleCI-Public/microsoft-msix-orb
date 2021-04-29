@@ -37,11 +37,14 @@ jobs:
       - checkout
       - msix/pack:
           working-dir: sample/SampleExe
-          import-cert: true
           using-sln: false
           signing-cert: MSIX_SIGNING_CERT # I messed up when setting this.
           mapping-file: mapping.txt
           manifest-file: appxmanifest.xml
+      - msix/sign:
+          working-dir: sample/SampleExe
+          package-name: circleci-cli
+
 workflows:
   test-pack:
     unless: << pipeline.parameters.run-integration-tests >>
