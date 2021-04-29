@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop" 
 
-$default_parameters = "/p:Platform=x64"
+$default_parameters = @("/p:Platform=x64")
 $parameters = if ($Env:PACK_PARAMETERS -eq $null) {
   $default_parameters
 } else {
