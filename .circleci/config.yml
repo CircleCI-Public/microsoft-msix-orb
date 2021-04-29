@@ -29,7 +29,19 @@ jobs:
           working-dir: sample/Sample
           import-cert: true
           signing-cert: MSIX_SIGNING_CERT # I messed up when setting this.
-
+  integration-test_using-exe:
+    executor:
+      name: win/default
+      shell: powershell.exe
+    steps:
+      - checkout
+      - msix/pack:
+          working-dir: sample/SampleExe
+          import-cert: true
+          using-sln: false
+          signing-cert: MSIX_SIGNING_CERT # I messed up when setting this.
+          mapping-file: mapping.txt
+          manifest-file: appxmanifest.xml
 workflows:
   test-pack:
     unless: << pipeline.parameters.run-integration-tests >>
@@ -52,6 +64,7 @@ workflows:
     when: << pipeline.parameters.run-integration-tests >>
     jobs:
       - integration-test_using-sln
+      - integration-test_using-exe
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/microsoft-msix
           context: orb-publishing
@@ -60,6 +73,7 @@ workflows:
           publish-version-tag: false
           requires:
             - integration-test_using-sln
+            - integration-test_using-exe
           filters:
             branches:
               only:
