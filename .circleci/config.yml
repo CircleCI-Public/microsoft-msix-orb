@@ -24,9 +24,7 @@ jobs:
       name: win/default
       shell: pwsh.exe
     steps:
-      - run:
-          name: Clone demo repository
-          command: git clone https://github.com/CircleCI-Public/msix-orb-demo.git sample
+      - checkout
       - msix/pack:
           working-dir: sample/Sample
           import-cert: true

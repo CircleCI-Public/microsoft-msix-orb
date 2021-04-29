@@ -1,0 +1,8 @@
+[ResourceMetadata]
+"ResourceDimensions"                    "language-en-us"
+"ResourceId"                            "English"
+
+[Files]
+"circleci.exe" "circleci.exe"
+"icons\circleci-plain.png" "icons\circleci-plain.png"
+"icons\circleci-stacked.png" "icons\circleci-stacked.png"
