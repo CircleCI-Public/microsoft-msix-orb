@@ -16,7 +16,7 @@ if ($Env:PACK_IMPORT_CERT -eq 1) {
   [System.Convert]::FromBase64String($certificate) | Set-Content C:\cert.pfx -AsByteStream
   Import-PfxCertificate -FilePath C:\cert.pfx -Password (ConvertTo-SecureString -String "$cert_pass" -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
 }
-"& $msbuild $parameters" | iex
+& $msbuild $parameters
 
 $compress = @{
   Path = "AppPackages"
