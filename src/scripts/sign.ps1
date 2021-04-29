@@ -1,3 +1,5 @@
+$ErrorActionPreference = "Stop" 
+
 $default_parameters = "${Env:SIGN_PACKAGE_NAME}.appx"
 $parameters = if ($Env:SIGN_PARAMETERS -eq $null) {
   $default_parameters
@@ -10,8 +12,6 @@ if ($Env:SIGN_FINGERPRINT -ne $null) {
 } else {
     $parameters = "/a " + $parameters
 }
-
-echo $parameters
 
 if ($Env:SIGN_IMPORT_CERT -eq 1) {
   $certificate = $ExecutionContext.InvokeCommand.ExpandString($Env:SIGN_SIGNING_CERT)

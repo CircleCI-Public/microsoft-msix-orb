@@ -38,12 +38,12 @@ jobs:
       - msix/pack:
           working-dir: sample/SampleExe
           using-sln: false
-          signing-cert: MSIX_SIGNING_CERT # I messed up when setting this.
           mapping-file: mapping.txt
           manifest-file: appxmanifest.xml
       - msix/sign:
           working-dir: sample/SampleExe
           package-name: circleci-cli
+          signing-cert: MSIX_SIGNING_CERT
 
 workflows:
   test-pack:
