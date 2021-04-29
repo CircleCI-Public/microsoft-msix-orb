@@ -30,6 +30,7 @@ jobs:
       - msix/pack:
           working-dir: sample/Sample
           import-cert: true
+          signing-cert: MSIX_SIGNING_CERT # I messed up when setting this.
 
 workflows:
   test-pack:
