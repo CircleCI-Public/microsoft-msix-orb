@@ -1,0 +1,100 @@
+parameters:
+  sdk-version:
+    type: string
+    default: "10.0.17763.0"
+    description: Windows SDK version to use when invoking Makeappx.exe.
+  working-dir:
+    type: string
+    default: "~/project"
+    description: Working directory
+  package-name:
+    type: string
+    default: "package"
+    description: Output package name
+  parameters:
+    type: string
+    default: ""
+    description: |
+      Parameters to pass to either Makeappx.exe or MSBuild.exe, depending on the
+      value of using-sln.
+  using-sln:
+    type: boolean
+    default: true
+    description: |
+      Build an MSIX package from a solution file. Set this to false if you have
+      a prebuilt or existing executable file. This determine whether your
+      package is built using msbuild or makeappx.
+  mapping-file:
+    type: string
+    default: ""
+    description: Mapping file to use when building MSIX without source code.
+  manifest-file:
+    type: string
+    default: ""
+    description: Manifest file to use when building MSIX without source code.
+  import-cert:
+    type: boolean
+    default: true
+    description: |
+      Automatically import a certificate into the machine's store based on the
+      valaues of signing-cert and certificate-password. Set this to false if you
+      will be importing your certificate in some other way (e.g Hashicorp
+      Vault).
+  signing-cert:
+    type: env_var_name
+    default: MSIX_SIGNING_CERTIFICATE
+    description: |
+      Environment variable name for the base64-encoded signing certificate.
+  certificate-password:
+    type: env_var_name
+    default: MSIX_CERTIFICATE_PASSWORD
+    description: |
+      Environment variable containing the password used to decrypt the
+      certificate file.
+
+steps:
+  - when:
+      condition: <<parameters.using-sln>>
+      steps:
+        - run:
+            shell: powershell.exe
+            name: Build MSIX solution
+            command: <<include(scripts/pack-sln.ps1)>>
+            environment:
+              PACK_WINDOWS_SDK: <<parameters.sdk-version>>
+              PACK_PACKAGE_NAME: <<parameters.package-name>>
+              PACK_PARAMETERS: <<parameters.parameters>>
+              PACK_IMPORT_CERT: <<parameters.import-cert>>
+              PACK_SIGNING_CERT: $Env:<<parameters.signing-cert>>
+              PACK_CERT_PASSWORD: $Env:<<parameters.certificate-password>>
+            working_directory: <<parameters.working-dir>>
+        - store_artifacts:
+            path: <<parameters.working-dir>>/AppPackages.zip
+        - persist_to_workspace:
+            root: <<parameters.working-dir>>
+            paths:
+              - AppPackages
+
+  - unless:
+      condition: <<parameters.using-sln>>
+      steps:
+        - run:
+            shell: powershell.exe
+            name: Build MSIX installer with executable
+            command: <<include(scripts/pack-exe.ps1)>>
+            environment:
+              PACK_PACKAGE_NAME: <<parameters.package-name>>
+              PACK_WINDOWS_SDK: <<parameters.sdk-version>>
+              PACK_PARAMETERS: <<parameters.parameters>>
+              PACK_IMPORT_CERT: <<parameters.import-cert>>
+              PACK_SIGNING_CERT: $Env:<<parameters.signing-cert>>
+              PACK_CERT_PASSWORD: $Env:<<parameters.certificate-password>>
+              PACK_MAP_FILE: <<parameters.mapping-file>>
+              PACK_MANIFEST_FILE: <<parameters.manifest-file>>
+            working_directory: <<parameters.working-dir>>
+        - store_artifacts:
+            path: <<parameters.working-dir>>/<<parameters.package-name>>.appx
+        - persist_to_workspace:
+            root: <<parameters.working-dir>>
+            paths:
+              - "*.appx"

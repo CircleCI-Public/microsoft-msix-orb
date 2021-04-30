@@ -1,0 +1,2 @@
+MainPackage=C:\Users\virtual\source\repos\Sample\bin\AnyCPU\Debug\Sample_1.0.1.0_AnyCPU_Debug.msix
+SymbolPackage=C:\Users\virtual\source\repos\Sample\obj\Debug\Symbols\Sample_1.0.1.0_AnyCPU_Debug.appxsym

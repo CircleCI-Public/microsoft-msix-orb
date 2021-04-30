@@ -1,0 +1,61 @@
+parameters:
+  sdk-version:
+    type: string
+    default: "10.0.17763.0"
+    description: Windows SDK version to use when invoking Makeappx.exe.
+  working-dir:
+    type: string
+    default: "~/project"
+    description: Working directory
+  package-name:
+    type: string
+    description: Name of the package to sign.
+  parameters:
+    type: string
+    default: ""
+    description: |
+      Parameters to pass to SignTool.exe.
+  import-cert:
+    type: boolean
+    default: true
+    description: |
+      Automatically import a certificate into the machine's store based on the
+      valaues of signing-cert and certificate-password. Set this to false if you
+      will be importing your certificate in some other way (e.g Hashicorp
+      Vault).
+  signing-cert:
+    type: env_var_name
+    default: MSIX_SIGNING_CERTIFICATE
+    description: |
+      Environment variable name for the base64-encoded signing certificate.
+  certificate-password:
+    type: env_var_name
+    default: MSIX_CERTIFICATE_PASSWORD
+    description: |
+      Environment variable containing the password used to decrypt the
+      certificate file.
+  certificate-fingerprint:
+    type: string
+    description: Fingerprint of the certificate to sign the application with.
+    default: ""
+
+steps:
+  - run:
+      shell: powershell.exe
+      name: Sign <<parameters.package-name>>
+      command: <<include(scripts/sign.ps1)>>
+      environment:
+        SIGN_WINDOWS_SDK: <<parameters.sdk-version>>
+        SIGN_PACKAGE_NAME: <<parameters.package-name>>
+        SIGN_PARAMETERS: <<parameters.parameters>>
+        SIGN_IMPORT_CERT: <<parameters.import-cert>>
+        SIGN_SIGNING_CERT: $Env:<<parameters.signing-cert>>
+        SIGN_CERT_PASSWORD: $Env:<<parameters.certificate-password>>
+        SIGN_FINGERPRINT: <<parameters.certificate-fingerprint>>
+      working_directory: <<parameters.working-dir>>
+  - store_artifacts:
+      path: <<parameters.working-dir>>/<<parameters.package-name>>.appx
+  - persist_to_workspace:
+      root: <<parameters.working-dir>>
+      paths:
+        - "*.appx"

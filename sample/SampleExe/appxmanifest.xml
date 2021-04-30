@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+  <Identity Name="com.circleci.cli" Version="1.0.0.0" Publisher="CN=Contoso Software, O=Contoso Corporation, C=US" ProcessorArchitecture="x64" />
+    <Properties>
+       <DisplayName>CircleCI CLI</DisplayName>
+       <PublisherDisplayName>CircleCI</PublisherDisplayName>
+       <Description>The CircleCI CLI</Description>
+      <Logo>icons\circleci-plain.png</Logo>
+    </Properties>
+    <Resources>
+      <Resource Language="en-us" />
+    </Resources>
+    <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14316.0" MaxVersionTested="10.0.15063.0" />
+    </Dependencies>
+    <Capabilities>
+      <rescap:Capability Name="runFullTrust"/>
+    </Capabilities>
+    <Applications>
+      <Application Id="CircleCICLI" Executable="circleci.exe" EntryPoint="Windows.FullTrustApplication">
+        <uap:VisualElements DisplayName="CircleCI CLI" Description="CircleCI CLI" Square150x150Logo="icons\circleci-stacked.png"
+           Square44x44Logo="icons\circleci-plain.png" BackgroundColor="#fff000" />
+      </Application>
+     </Applications>
+  </Package>
