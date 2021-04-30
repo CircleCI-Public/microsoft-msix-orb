@@ -1,11 +1,13 @@
 description: |
   Create an MSIX installer from a given AppManifest and prebuilt executable.
+  msix/sign expects a certificate to be imported, either through environment
+  variables or some other means.
 
 usage:
   version: 2.1
 
   orbs:
-    msix: circleci/microsoft-msix@dev:alpha
+    msix: circleci/microsoft-msix@x.y.z
     win: circleci/windows@2.4.0
   jobs:
     using-sln:
