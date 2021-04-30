@@ -70,7 +70,8 @@ workflows:
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/microsoft-msix
           context: orb-publisher
-          add-pr-comment: false
+          add-pr-comment: true
+          bot-token-variable: GHI_TOKEN
           fail-if-semver-not-indicated: true
           publish-version-tag: true
           ssh-fingerprints: cd:57:54:9e:99:e3:34:62:29:80:1c:8b:26:bf:3b:c2
