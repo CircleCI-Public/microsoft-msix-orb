@@ -37,7 +37,7 @@ parameters:
     default: true
     description: |
       Automatically import a certificate into the machine's store based on the
-      valaues of signing-cert and certificate-password. Set this to false if you
+      values of signing-cert and certificate-password. Set this to false if you
       will be importing your certificate in some other way (e.g Hashicorp
       Vault).
   signing-cert:
