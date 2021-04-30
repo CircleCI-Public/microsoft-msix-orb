@@ -1,0 +1,22 @@
+description: Create a 32-bit MSIX installer from a given Visual Studio Solution.
+
+usage:
+  version: 2.1
+
+  orbs:
+    msix: circleci/microsoft-msix@dev:alpha
+    win: circleci/windows@2.4.0
+  jobs:
+    using-sln:
+      executor:
+        name: win/default
+      steps:
+        - checkout
+        - msix/pack:
+            import-cert: true
+            parameters: "/p:Platform=x86"
+
+  workflows:
+    build:
+      jobs:
+        - using-sln

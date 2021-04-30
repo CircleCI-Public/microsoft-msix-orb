@@ -1,0 +1,26 @@
+description: |
+  Create an MSIX installer from a given AppManifest and prebuilt executable.
+
+usage:
+  version: 2.1
+
+  orbs:
+    msix: circleci/microsoft-msix@dev:alpha
+    win: circleci/windows@2.4.0
+  jobs:
+    using-sln:
+      executor:
+        name: win/default
+      steps:
+        - checkout
+        - msix/pack:
+            using-sln: false
+            mapping-file: mapping.txt
+            manifest-file: appxmanifest.xml
+        - msix/sign:
+            import-cert: true
+
+  workflows:
+    build:
+      jobs:
+        - using-sln
