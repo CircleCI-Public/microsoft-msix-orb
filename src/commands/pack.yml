@@ -9,7 +9,7 @@ parameters:
     description: Working directory
   package-name:
     type: string
-    default: "package.appx"
+    default: "package"
     description: Output package name
   parameters:
     type: string
