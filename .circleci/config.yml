@@ -22,7 +22,6 @@ jobs:
   integration-test_using-sln:
     executor:
       name: win/default
-      shell: powershell.exe
     steps:
       - checkout
       - msix/pack:
@@ -32,7 +31,6 @@ jobs:
   integration-test_using-exe:
     executor:
       name: win/default
-      shell: powershell.exe
     steps:
       - checkout
       - msix/pack:
@@ -54,13 +52,13 @@ workflows:
       - orb-tools/pack # Pack orb source
       - orb-tools/publish-dev:
           orb-name: circleci/microsoft-msix
-          context: orb-publishing
+          context: orb-publisher
           requires:
             - orb-tools/lint
             - orb-tools/pack
       - orb-tools/trigger-integration-tests-workflow:
           name: trigger-integration-dev
-          context: orb-publishing
+          context: orb-publisher
           requires:
             - orb-tools/publish-dev
 
@@ -71,10 +69,11 @@ workflows:
       - integration-test_using-exe
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/microsoft-msix
-          context: orb-publishing
+          context: orb-publisher
           add-pr-comment: false
           fail-if-semver-not-indicated: true
-          publish-version-tag: false
+          publish-version-tag: true
+          ssh-fingerprints: cd:57:54:9e:99:e3:34:62:29:80:1c:8b:26:bf:3b:c2
           requires:
             - integration-test_using-sln
             - integration-test_using-exe

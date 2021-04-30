@@ -1,10 +1,10 @@
 version: 2.1
 
 description: >
-  Sample orb description
+  Easily build MSIX and AppX packages on CircleCI.
 
 display:
-  home_url: "https://www.website.com/docs"
+  home_url: "https://docs.microsoft.com/en-us/windows/msix/overview"
   source_url: "https://www.github.com/CircleCI-Public/microsoft-msix-orb"
 
 orbs:

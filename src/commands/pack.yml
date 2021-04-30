@@ -57,6 +57,7 @@ steps:
       condition: <<parameters.using-sln>>
       steps:
         - run:
+            shell: powershell.exe
             name: Build MSIX solution
             command: <<include(scripts/pack-sln.ps1)>>
             environment:
@@ -78,6 +79,7 @@ steps:
       condition: <<parameters.using-sln>>
       steps:
         - run:
+            shell: powershell.exe
             name: Build MSIX installer with executable
             command: <<include(scripts/pack-exe.ps1)>>
             environment:
