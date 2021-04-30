@@ -1,4 +1,7 @@
-description: Create an MSIX installer from a given Visual Studio Solution.
+description: |
+ Create an MSIX installer from a given Visual Studio Solution.
+ msix/pack expects a certificate to be imported, either through environment
+ variables or some other means.
 
 usage:
   version: 2.1
