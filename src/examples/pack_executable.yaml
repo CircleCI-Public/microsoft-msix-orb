@@ -7,7 +7,7 @@ usage:
   version: 2.1
 
   orbs:
-    msix: circleci/microsoft-msix@x.y.z
+    msix: circleci/microsoft-msix@1.0
     win: circleci/windows@2.4.0
   jobs:
     using-sln:
