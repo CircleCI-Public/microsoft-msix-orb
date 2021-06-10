@@ -41,7 +41,6 @@ parameters:
 
 steps:
   - run:
-      shell: powershell.exe
       name: Sign <<parameters.package-name>>
       command: <<include(scripts/sign.ps1)>>
       environment:
