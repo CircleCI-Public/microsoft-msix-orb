@@ -1,8 +1,11 @@
 $ErrorActionPreference = "Stop"
 
 $default_parameters = "/m $Env:PACK_MANIFEST_FILE /f $Env:PACK_MAP_FILE /p $Env:PACK_PACKAGE_NAME"
-$parameters = ($Env:PACK_PARAMETERS -eq $null) ? $default_parameters : $Env:PACK_PARAMETERS
+
+$parameters = if ($null -ne $Env:PACK_PARAMETERS) {
+    $Env:PACK_PARAMETERS
+} else { $default_parameters }
 
 $makeappx = "'${Env:ProgramFiles(x86)}\Windows Kits\10\bin\${Env:PACK_WINDOWS_SDK}\x64\makeappx.exe'"
 
-"& $makeappx pack $parameters" | iex
+"& $makeappx pack $parameters" | Invoke-Expression

@@ -1,7 +1,10 @@
 $ErrorActionPreference = "Stop" 
 
 $default_parameters = "${Env:SIGN_PACKAGE_NAME}.appx"
-$parameters = ($Env:SIGN_PARAMETERS -eq $null) ? $default_parameters : $Env:SIGN_PARAMETERS
+
+$parameters = if ($null -ne $Env:PACK_PARAMETERS) {
+  $Env:PACK_PARAMETERS
+} else { $default_parameters }
 
 if ($Env:SIGN_FINGERPRINT -ne $null) {
   $parameters = "/sha1 $Env:SIGN_FINGERPRINT " + $parameters
@@ -19,4 +22,4 @@ if ($Env:SIGN_IMPORT_CERT -eq 1) {
 
 $signtool = "'${Env:ProgramFiles(x86)}\Windows Kits\10\bin\${Env:SIGN_WINDOWS_SDK}\x64\signtool.exe'"
 
-"& $signtool sign $parameters" | iex
+"& $signtool sign $parameters" | Invoke-Expression
