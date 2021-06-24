@@ -24,6 +24,9 @@ jobs:
       name: win/default
     steps:
       - checkout
+      - run:
+          working_directory: sample/Sample
+          command: dotnet restore
       - msix/pack:
           working-dir: sample/Sample
           import-cert: true
