@@ -13,10 +13,12 @@ if ($Env:SIGN_FINGERPRINT -ne $null) {
 }
 
 if ($Env:SIGN_IMPORT_CERT -eq 1) {
+  Import-Module -SkipEditionCheck PKI
+
   $certificate = $ExecutionContext.InvokeCommand.ExpandString($Env:SIGN_SIGNING_CERT)
   $cert_pass = $ExecutionContext.InvokeCommand.ExpandString($Env:SIGN_CERT_PASSWORD)
 
-  [System.Convert]::FromBase64String($certificate) | Set-Content Temp:\cert.pfx -Encoding Byte
+  [System.Convert]::FromBase64String($certificate) | Set-Content Temp:\cert.pfx -AsByteStream
   Import-PfxCertificate -FilePath Temp:\cert.pfx -Password (ConvertTo-SecureString -String "$cert_pass" -AsPlainText -Force) -CertStoreLocation Cert:\LocalMachine\My
 }
 
