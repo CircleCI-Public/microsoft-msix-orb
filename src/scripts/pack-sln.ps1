@@ -2,9 +2,11 @@ $ErrorActionPreference = "Stop"
 
 $default_parameters = "/p:Platform=x64"
 
-$parameters = if ($null -ne $Env:PACK_PARAMETERS) {
+$parameters = if ("" -ne $Env:PACK_PARAMETERS) {
   $Env:PACK_PARAMETERS
 } else { $default_parameters }
+
+Get-Variable Env
 
 $msbuild = "'${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe'"
 
