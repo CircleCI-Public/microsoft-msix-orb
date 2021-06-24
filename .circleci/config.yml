@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run:
           working_directory: sample/Sample
-          command: dotnet restore
+          command: msbuild -t:restore
       - msix/pack:
           working-dir: sample/Sample
           import-cert: true
