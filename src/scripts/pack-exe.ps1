@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $default_parameters = "/m $Env:PACK_MANIFEST_FILE /f $Env:PACK_MAP_FILE /p $Env:PACK_PACKAGE_NAME"
 
-$parameters = if ($null -ne $Env:PACK_PARAMETERS) {
+$parameters = if ("" -ne $Env:PACK_PARAMETERS) {
   $Env:PACK_PARAMETERS
 } else { $default_parameters }
 
