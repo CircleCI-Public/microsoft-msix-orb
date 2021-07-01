@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $default_parameters = "${Env:SIGN_PACKAGE_NAME}.appx"
 
-$parameters = if ($null -ne $Env:PACK_PARAMETERS) {
+$parameters = if ("" -ne $Env:PACK_PARAMETERS) {
   $Env:PACK_PARAMETERS
 } else { $default_parameters }
 
