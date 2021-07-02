@@ -24,6 +24,4 @@ if ($Env:SIGN_IMPORT_CERT -eq 1) {
 
 $signtool = "'${Env:ProgramFiles(x86)}\Windows Kits\10\bin\${Env:SIGN_WINDOWS_SDK}\x64\signtool.exe'"
 
-echo $parameters
-
 "& $signtool sign $parameters" | Invoke-Expression
