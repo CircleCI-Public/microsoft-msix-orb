@@ -24,10 +24,13 @@ jobs:
       name: win/default
     steps:
       - checkout
+      - run:
+          working_directory: sample/Sample
+          command: msbuild -t:restore
       - msix/pack:
           working-dir: sample/Sample
           import-cert: true
-          signing-cert: MSIX_SIGNING_CERT # I messed up when setting this.
+          signing-cert: MSIX_SIGNING_CERT
   integration-test_using-exe:
     executor:
       name: win/default
