@@ -6,7 +6,7 @@ $p = if ("" -ne $Env:SIGN_PARAMETERS) {
   $Env:SIGN_PARAMETERS
 } else { $default_parameters }
 
-if ($Env:SIGN_FINGERPRINT -ne $null) {
+if ($Env:SIGN_FINGERPRINT -ne "") {
   $parameters = "/sha1 $Env:SIGN_FINGERPRINT " + $p
 } else {
     $parameters = "/a " + $p
